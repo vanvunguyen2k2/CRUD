@@ -1,16 +1,19 @@
 package com.example.crud.service;
 
+import com.example.crud.Dto.SearchUserDto;
 import com.example.crud.Dto.UserCreateRequestDto;
 import com.example.crud.Dto.UserDto;
 import com.example.crud.Dto.UserUpdateRequestDto;
 import com.example.crud.entity.Role;
 import com.example.crud.entity.User;
+import com.example.crud.repository.Search.UserSearch;
 import com.example.crud.repository.UserRepo;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -98,5 +101,11 @@ public class UserService implements IUservice {
         userRepo.save(user);
     }
 
+    @Override
+    public Page<User> search(SearchUserDto searchUserDto, Pageable pageable) {
+        Specification<User>  condition = UserSearch.userSpecification(searchUserDto);
+        return userRepo.findAll(condition, pageable);
+    }
 
-   }
+
+}

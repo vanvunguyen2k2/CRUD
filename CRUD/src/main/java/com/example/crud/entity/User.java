@@ -1,5 +1,6 @@
 package com.example.crud.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -12,11 +13,12 @@ import java.util.List;
 @Data
 @Entity
 @Table(name = "`User`")
-public class User implements UserDetails
-{
+@JsonIgnoreProperties({"accountNonExpired", "credentialsNonExpired", "accountNonLocked"})
+
+public class User implements UserDetails {
 
     @Id
-    @GeneratedValue(strategy =  GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
 

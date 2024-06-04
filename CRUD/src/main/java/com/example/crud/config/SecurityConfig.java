@@ -1,4 +1,5 @@
 package com.example.crud.config;
+
 import com.example.crud.filter.JwtAuthenticationFilter;
 import com.example.crud.service.UserDetailsImp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,7 +29,7 @@ public class SecurityConfig {
     private JwtAuthenticationFilter jwtAuthenticationFilter;
 
     @Autowired
-    private  CustomLogoutHandler logoutHandler;
+    private CustomLogoutHandler logoutHandler;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -36,21 +37,21 @@ public class SecurityConfig {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
-                        req->req.requestMatchers("/api/v1/auth/login","/api/v1/user/create" ,"/api/v1/auth/register", "/refresh_token/**")
+                        req -> req.requestMatchers("/api/v1/auth/login", "/api/v1/user/search", "/api/v1/user/create", "/api/v1/auth/register", "/refresh_token/**")
                                 .permitAll()
                                 .requestMatchers("/api/v1/user/getAll/**").hasAuthority("ADMIN")
                                 .anyRequest()
                                 .authenticated()
                 ).userDetailsService(userDetailsService)
-                .sessionManagement(session->session
+                .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .exceptionHandling(
-                        e->e.accessDeniedHandler(
-                                (request, response, accessDeniedException)->response.setStatus(403)
+                        e -> e.accessDeniedHandler(
+                                (request, response, accessDeniedException) -> response.setStatus(403)
                         )
                                 .authenticationEntryPoint(new HttpStatusEntryPoint(HttpStatus.UNAUTHORIZED)))
-                .logout(l->l
+                .logout(l -> l
                         .logoutUrl("/logout")
                         .addLogoutHandler(logoutHandler)
                         .logoutSuccessHandler((request, response, authentication) -> SecurityContextHolder.clearContext()
