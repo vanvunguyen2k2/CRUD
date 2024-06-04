@@ -37,20 +37,16 @@ public class UserService implements IUservice {
 
     @Override
     public User create(UserCreateRequestDto dto) {
-
         Optional<User> optionalUser = userRepo.findUserByUsername(dto.getUsername());
         if (optionalUser.isPresent()) {
-
             System.out.println("USER_NAME_EXISTSED");
         }
-
         User user  = new User();
         BeanUtils.copyProperties(dto, user);
         String passwordEncodeder = passwordEncoder.encode(dto.getPassword());
         user.setRole(Role.EMPLOYER);
         user.setPassword(passwordEncodeder);
         user.setWorking(true);
-
         return userRepo.save(user);
     }
 
