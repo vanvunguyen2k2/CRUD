@@ -2,6 +2,7 @@ package com.example.crud.entity;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.Pattern;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -36,7 +37,12 @@ public class User implements UserDetails {
 
     @Column(name = "role")
     @Enumerated(EnumType.STRING)
+    @Pattern(regexp = "ADMIN | EMPLOYER", message = "The type must be ADMIN or EMPLOYER")
     private Role role;
+
+    @Column(name = "email")
+    private  String email;
+
 
     @Column(name = "isWorking")
     private boolean isWorking;
